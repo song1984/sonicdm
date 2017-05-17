@@ -34,16 +34,12 @@ module.exports = function(grunt) {
   				separator: ';',
   			},
   			concat_plugins: {
-  				src: ['./__js/plugins.js', './__js/__plugins/*'],
+  				src: ['./__js/plugins.js', './__js/__plugins/*.js'],
   				dest: './__js/concat/plugins.js'
-  			},
-  			concat_main: {
-  				src: ['./__js/main.js', './__js/__main/*'],
-  				dest: './__js/concat/main.js'
   			}
   		},
   		jshint: {
-    		all: ['./__js/__main/*', './__js/__plugins/*']
+    		all: ['./__js/__plugins/*']
   		},
   		watch: {
   			scripts: {
@@ -65,7 +61,7 @@ module.exports = function(grunt) {
   	grunt.loadNpmTasks('grunt-contrib-watch');
 
   	// 默认被执行的任务列表。
-  	grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'less:build_main']);
+  	grunt.registerTask('default', ['concat', 'uglify', 'less:build_main']);
   	grunt.registerTask('uglify-js', ['uglify']);
   	grunt.registerTask('build-css', ['less:build_main']);
   	grunt.registerTask('concat-js', ['concat']);
