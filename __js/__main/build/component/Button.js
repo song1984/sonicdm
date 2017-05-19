@@ -33,7 +33,7 @@ var Button = function (_Component) {
 			return _react2.default.createElement(
 				'button',
 				null,
-				this.props.name
+				'test'
 			);
 		}
 	}]);
