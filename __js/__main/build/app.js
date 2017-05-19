@@ -12,36 +12,15 @@ var _Navigator = require('./component/Navigator');
 
 var _Navigator2 = _interopRequireDefault(_Navigator);
 
+var _Button = require('./component/Button');
+
+var _Button2 = _interopRequireDefault(_Button);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var dropdowns = [{
-	title: "Products",
-	mission: "get all products"
-}, {
-	title: "Service",
-	mission: "goto service"
-}, {
-	title: "Support",
-	mission: "goto Support"
-}, {
-	title: "About",
-	options: [{
-		href: "Articel",
-		name: "AAA",
-		mission: "goto AAA"
-	}, {
-		href: "BBB",
-		name: "BBB",
-		mission: "goto BBB"
-	}]
-}];
-
-var logo = {
-	src: "./img/apple-touch-icon.png",
-	alt: "SonicDM"
-};
-
-_reactDom2.default.render(_react2.default.createElement(_Navigator2.default, {
-	dropdowns: dropdowns,
-	logo: logo
-}), document.getElementById("pad"));
+_reactDom2.default.render(_react2.default.createElement(
+	'div',
+	null,
+	_react2.default.createElement(_Navigator2.default, null),
+	_react2.default.createElement(_Button2.default, null)
+), document.getElementById("pad"));

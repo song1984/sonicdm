@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import emitter from './SingleEmitter';
+
+{/*载入测试数据 */}
+import navi_data from '../test_data/navigatorData'
 
 class Navigator extends Component  {
 	
@@ -9,6 +13,9 @@ class Navigator extends Component  {
 	componentWillMount(){
 
 		this.get_props();
+
+		// 监听自定义事件 ,触发回调
+		emitter.addListener('Navigator',(obj) => console.log(100))
 	}
 
 	/*
@@ -17,9 +24,9 @@ class Navigator extends Component  {
 	get_props() {
 
 		// 从服务端获得导航栏的所有相关信息，
-		let temp_dropdowns = this.props.dropdowns;
-		let temp_logo = this.props.logo;
-	
+		let temp_dropdowns = navi_data.dropdowns;
+		let temp_logo = navi_data.logo;
+		
 		// 并赋值到this.dropdowns this.logo
 		this.dropdowns = temp_dropdowns;
 		this.logo = temp_logo;
@@ -40,10 +47,9 @@ class Navigator extends Component  {
 
 		// 获得任务
 		let mission = idx_op != undefined ? this.dropdowns[idx].options[idx_op].mission : this.dropdowns[idx].mission;
-		console.log(mission);
 
 		// 通过第三方组件触发自定义事件，以此方式通知其他组件重新渲染自己
-
+		emitter.emit('component', mission);
 	}
 
 	/*
