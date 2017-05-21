@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _SingleEmitter = require('./SingleEmitter');
+
+var _SingleEmitter2 = _interopRequireDefault(_SingleEmitter);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28,12 +32,17 @@ var Button = function (_Component) {
 	}
 
 	_createClass(Button, [{
+		key: 'callNavi',
+		value: function callNavi() {
+			_SingleEmitter2.default.emit('Navigator', 100);
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return _react2.default.createElement(
 				'button',
-				null,
-				this.props.name
+				{ onClick: this.callNavi.bind(this) },
+				'test'
 			);
 		}
 	}]);

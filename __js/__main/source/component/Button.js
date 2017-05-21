@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
+import emitter from './SingleEmitter';
 
 class Button extends Component {
-	render(){
+	
+	callNavi() {
+		emitter.emit('Navigator',100);
+	}
+
+	render() {
 		return (
-			<button>{this.props.name}</button>
+			<button onClick={this.callNavi.bind(this)} >test</button>
 		);
 	}
 }

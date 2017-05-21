@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import Button from './component/Button';
+import Navigator from './component/Navigator';
+import Button from './component/Button'
 
 ReactDom.render(
-	<Button 
-		name={'Test'}
-	/>
+	<div>
+		<Navigator />
+		<Button />
+	</div>
 	,
 	document.getElementById("pad")
 );
