@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import emitter from './SingleEmitter';
 
 {/*载入测试数据 */}
-import navi_data from '../test_data/navigatorData'
+import navi_data from '../../test_data/navigatorData'
 
 class Navigator extends Component  {
 	

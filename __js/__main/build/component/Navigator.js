@@ -14,7 +14,7 @@ var _SingleEmitter = require('./SingleEmitter');
 
 var _SingleEmitter2 = _interopRequireDefault(_SingleEmitter);
 
-var _navigatorData = require('../test_data/navigatorData');
+var _navigatorData = require('../../test_data/navigatorData');
 
 var _navigatorData2 = _interopRequireDefault(_navigatorData);
 
