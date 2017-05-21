@@ -15,7 +15,7 @@ class Navigator extends Component  {
 		this.get_props();
 
 		// 监听自定义事件 ,触发回调
-		emitter.addListener('Navigator',(obj) => console.log(100))
+		emitter.addListener('Navigator',(obj) => console.log(obj))
 	}
 
 	/*
@@ -47,7 +47,7 @@ class Navigator extends Component  {
 
 		// 获得任务
 		let mission = idx_op != undefined ? this.dropdowns[idx].options[idx_op].mission : this.dropdowns[idx].mission;
-
+		console.log(mission);
 		// 通过第三方组件触发自定义事件，以此方式通知其他组件重新渲染自己
 		emitter.emit('component', mission);
 	}

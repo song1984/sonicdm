@@ -51,7 +51,7 @@ var Navigator = function (_Component) {
 
 			// 监听自定义事件 ,触发回调
 			_SingleEmitter2.default.addListener('Navigator', function (obj) {
-				return console.log(100);
+				return console.log(obj);
 			});
 		}
 
@@ -91,8 +91,8 @@ var Navigator = function (_Component) {
 			// 获得任务
 			var mission = idx_op != undefined ? this.dropdowns[idx].options[idx_op].mission : this.dropdowns[idx].mission;
 			console.log(mission);
-
 			// 通过第三方组件触发自定义事件，以此方式通知其他组件重新渲染自己
+			_SingleEmitter2.default.emit('component', mission);
 		}
 
 		/*

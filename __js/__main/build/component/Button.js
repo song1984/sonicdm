@@ -34,7 +34,6 @@ var Button = function (_Component) {
 	_createClass(Button, [{
 		key: 'callNavi',
 		value: function callNavi() {
-			console.log('in');
 			_SingleEmitter2.default.emit('Navigator', 100);
 		}
 	}, {

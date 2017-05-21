@@ -4,7 +4,9 @@
 	# 转换js
 babel --presets react,es2015 __js/__main/source -d __js/__main//build
 	# 打包js
-browserify __js/__main/build/app.js -o __js/concat/main.js
+#browserify __js/__main/build/app.js -o __js/concat/main.js
+webpack
+
 
 # 处理一般js和css
 grunt
