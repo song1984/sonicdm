@@ -9439,16 +9439,7 @@ function _interopRequireDefault(obj) {
 	return obj && obj.__esModule ? obj : { default: obj };
 }
 
-window.onload = function () {
-	console.log(1);
-	_reactDom2.default.render(_react2.default.createElement('div', null, _react2.default.createElement(_Navigator2.default, null), _react2.default.createElement(_Button2.default, null)), document.getElementById("pad"));
-};
-
-function run() {
-	console.log(2);
-}
-
-run();
+_reactDom2.default.render(_react2.default.createElement('div', null, _react2.default.createElement(_Navigator2.default, null), _react2.default.createElement(_Button2.default, null)), document.getElementById("pad"));
 
 /***/ }),
 /* 82 */
