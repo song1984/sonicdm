@@ -5,6 +5,7 @@ class Button extends Component {
 	
 	callNavi() {
 		emitter.emit('Navigator',100);
+		console.log('callNavi');
 	}
 
 	render() {

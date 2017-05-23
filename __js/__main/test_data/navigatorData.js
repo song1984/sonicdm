@@ -29,7 +29,7 @@ let dropdowns = [
 ]
 
 let logo = {
-	src: "./img/apple-touch-icon.png",
+	src: "../img/apple-touch-icon.png",
 	alt: "SonicDM"
 }
 
