@@ -35,6 +35,7 @@ var Button = function (_Component) {
 		key: 'callNavi',
 		value: function callNavi() {
 			_SingleEmitter2.default.emit('Navigator', 100);
+			console.log('callNavi');
 		}
 	}, {
 		key: 'render',

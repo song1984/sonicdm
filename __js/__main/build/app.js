@@ -16,11 +16,16 @@ var _Button = require('./component/Button');
 
 var _Button2 = _interopRequireDefault(_Button);
 
+var _Carousel = require('./component/Carousel');
+
+var _Carousel2 = _interopRequireDefault(_Carousel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _reactDom2.default.render(_react2.default.createElement(
 	'div',
 	null,
 	_react2.default.createElement(_Navigator2.default, null),
+	_react2.default.createElement(_Carousel2.default, null),
 	_react2.default.createElement(_Button2.default, null)
 ), document.getElementById("pad"));
