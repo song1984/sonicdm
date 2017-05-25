@@ -1,37 +1,35 @@
 import React, {Component} from 'react';
-
-{/* 载入测试数据 */}
-import carousel_data from '../../test_data/carouselData';
+import PropTypes from 'prop-types';
+import httpRequest from './XHR';
 
 class Carousel extends Component {
 
+	// 构造函数
+	constructor(props) {
+  		super(props);
+  		this.state = {
+    		id: props.params.id,
+    		pics: props.params.pics,
+  		};
+	}
+
 	/*
-		处理轮播数据, 轮播数据结构
-		carousel_data={
-			id: "string",
-			pics: [	// 图片对象
-				[
-					{
-						src: "url",
-						alt: "string",
-						herf: "link",
-					},
-				],
-			],
-			url: "url"  // 获得图片的请求地址，这个和pics 必须有一个不为空， 如果同时存在则以pics为准
-		}
+		dom生成前加载轮播图数据
 	*/
 	componentWillMount() {
-		
-		// 测试数据使用
-		this.setState(carousel_data);
 
-		// 正式数据使用
-		// let _data = this.props.carousel_data;
-		// ( "pics" in _data && _data.pics !== undefined && _data.pics.length > 0 ) 
-		// ? this.setState({id: _data.id, pics: _data.pics})
-		// : ;// 执行url的请求 ajax  ?? 同步异步问题 回掉执行setState
+		this.get_props();
+	}
 
+	get_props() {
+
+		let params = this.props.params;
+
+		if(!params.pics.items || !params.pics.items.length){
+			httpRequest("get", params.pics.url, null, true, (result)=> {
+				this.setState({pics: result});
+			}, this);
+		}
 	}
 
 	/*
@@ -42,7 +40,7 @@ class Carousel extends Component {
 		return (
 			<div className="carousel-inner">
 			{
-				this.state.pics.map((imgs,idx_imgs)=>{
+				this.state.pics.items.map((imgs,idx_imgs)=>{
 					let class_name = idx_imgs === 0 ? "item active" : "item";
 					let _max_width = Math.floor((100 / imgs.length) * 100) / 100+ "%";
 					return (
@@ -69,7 +67,7 @@ class Carousel extends Component {
 				{/* 轮播（Carousel）指标  */}
 				<ol className="carousel-indicators">
 				{
-					this.state.pics.map((pic,idx) => {
+					this.state.pics.items.map((pic,idx) => {
 						let class_name = idx === 0 ? "active" : '';
 						return ( <li data-target = { "#" + this.state.id } data-slide-to={idx} className = {class_name} key={idx}></li> );
 					})
@@ -93,4 +91,59 @@ class Carousel extends Component {
 	}
 }
 
+
+/*
+	数据校验，以下为基本数据结构
+*/
+Carousel.propTypes = {
+	params: PropTypes.shape({
+				id: PropTypes.string.isRequired,
+				pics: PropTypes.shape({
+					items: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.shape({
+						src: PropTypes.string.isRequired,
+						alt: PropTypes.string.isRequired,
+						href: PropTypes.string.isRequired
+					}))),
+					url: PropTypes.string
+				})
+			}).isRequired
+}
+
+/*
+	默认演示数据 以下为数据结构
+*/
+
+Carousel.defaultProps = {
+	params: {
+		id: "Carousel-Demonstration",	// 轮播标记组的id
+		pics:{
+			items: [							// 二维数组，表示每个轮播项可以是一个或任意多个图片
+				[
+					{
+						src: "./img/1.jpg",
+						alt: "Demonstration 1",
+						href: "#"
+					}
+				],
+				[
+					{
+						src: "./img/4.jpg",
+						alt: "Demonstration 2",
+						href: "#"
+					}
+				],
+				[
+					{
+						src: "./img/5.jpg",
+						alt: "Demonstration 3",
+						href: "#"
+					}
+				],
+			],
+			url: "#"	// 获得图片的请求地址，这个和pics 必须有一个不为空， 如果同时存在则以pics为准
+		}
+	}
+}
+
 export default Carousel
+

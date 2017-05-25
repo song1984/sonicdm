@@ -1,11 +1,19 @@
 import React, {Component} from 'react';
 import emitter from './SingleEmitter';
-
-{/*载入测试数据 */}
-import navi_data from '../../test_data/navigatorData'
+import PropTypes from 'prop-types';
+import httpRequest from './XHR';
 
 class Navigator extends Component  {
 	
+	constructor(props) {
+		super(props);
+		this.state = {
+			id: props.params.id,
+			logo: props.params.logo,
+			dropdowns: props.params.dropdowns
+		};
+	}
+
 	/*
 		1. 利用生命周期 获得数据 调用this.get_props()
 		2. 监听 广播 事件	
@@ -23,13 +31,20 @@ class Navigator extends Component  {
 	*/
 	get_props() {
 
-		// 从服务端获得导航栏的所有相关信息，
-		let temp_dropdowns = navi_data.dropdowns;
-		let temp_logo = navi_data.logo;
+		var params = this.props.params;
+
+		if(!params.logo.src){
+			httpRequest("get", params.logo.url, null, true, (result)=> {
+				this.setState({logo:result});
+			});
+		}
 		
-		// 并赋值到this.dropdowns this.logo
-		this.dropdowns = temp_dropdowns;
-		this.logo = temp_logo;
+		if(!params.dropdowns.menus || !params.dropdowns.menus.length){
+			httpRequest("get", params.dropdowns.url, null, true, (result)=> {
+				this.setState({dropdowns: result});
+			});
+		}
+
 	}
 
 	/*
@@ -42,11 +57,11 @@ class Navigator extends Component  {
 		let idx_op = event.target.dataset.idx_op;
 		
 		// 带有菜单的 点击菜单标题应该直接返回
-		let item = this.dropdowns[idx];
+		let item = this.state.dropdowns.menus[idx];
 		if(item.options != undefined && idx_op == undefined) return;
 
 		// 获得任务
-		let mission = idx_op != undefined ? this.dropdowns[idx].options[idx_op].mission : this.dropdowns[idx].mission;
+		let mission = idx_op != undefined ? this.state.dropdowns.menus[idx].options[idx_op].mission : this.state.dropdowns.menus[idx].mission;
 		console.log(mission);
 		// 通过第三方组件触发自定义事件，以此方式通知其他组件重新渲染自己
 		emitter.emit('component', mission);
@@ -59,7 +74,7 @@ class Navigator extends Component  {
 
 		return (
 			<ul className="nav navbar-nav" onClick={this.plate_switch.bind(this)}>{
-				this.dropdowns.map((item,idx)=>{
+				this.state.dropdowns.menus.map((item,idx)=>{
 					return (
 						<li className="dropdown" key={idx} >
 							<a href="#"  data-idx={idx} className="dropdown-toggle" data-toggle="dropdown" role="button">{item.title}</a>
@@ -92,9 +107,9 @@ class Navigator extends Component  {
 							<span className="icon-bar"></span>
 						</button>
 						<a href="#" className="navbar-brand">
-							<img src={this.logo.src} style={{height:"100%", width:"auto"}}  alt={this.logo.alt}/>
+							<img src={this.state.logo.src} style={{height:"100%", width:"auto"}}  alt={this.state.logo.alt}/>
 						</a>
-						<p className="navbar-text"><strong>{this.logo.alt}</strong></p>
+						<p className="navbar-text"><strong>{this.state.logo.alt}</strong></p>
 					</div>
 					<div className="collapse navbar-collapse" id="collapsedNav">
 						{this.create_dropdown()}
@@ -105,4 +120,93 @@ class Navigator extends Component  {
 	}
 }
 
+Navigator.propTypes = {
+	params: PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		logo: PropTypes.shape({
+			src: PropTypes.string,
+			alt: PropTypes.string,
+			url: PropTypes.string
+		}),
+		dropdowns: PropTypes.shape({
+			menus: PropTypes.arrayOf(
+				PropTypes.shape({
+					title: PropTypes.string.isRequired,
+					mission: PropTypes.string.isRequired,
+					options: PropTypes.arrayOf(
+						PropTypes.shape({
+							href: PropTypes.string.isRequired,
+							name: PropTypes.string.isRequired,
+							mission: PropTypes.string.isRequired
+						})
+					)
+				})
+			),
+			url: PropTypes.string
+		})
+	}).isRequired
+} 
+
+
+
+Navigator.defaultProps = {
+	params: {
+		logo: {
+			src: "img/apple-touch-icon.png",
+			alt: "SonicDM",
+			url: ''
+		},
+		dropdowns: {
+			menus:[
+				{
+					title: "Products",
+					mission: "get all products"
+				},
+				{
+					title: "Service",
+					mission: "goto service"
+				},
+				{
+					title: "Support",
+					mission: "goto Support"
+				},	
+				{
+					title: "About",
+					mission: '',
+					options: [
+						{
+							href: "Articel",
+							name: "AAA",
+							mission: "goto AAA"
+						},
+						{
+							href: "BBB",
+							name: "BBB",
+							mission: "goto BBB"
+						},
+					]
+				}	
+			],
+			url: ''
+		}
+	}
+}
+
+
+
 export default Navigator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
