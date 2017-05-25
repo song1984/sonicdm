@@ -10,9 +10,13 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _carouselData = require('../../test_data/carouselData');
+var _propTypes = require('prop-types');
 
-var _carouselData2 = _interopRequireDefault(_carouselData);
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _XHR = require('./XHR');
+
+var _XHR2 = _interopRequireDefault(_XHR);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22,47 +26,45 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-{/* 载入测试数据 */}
-
 var Carousel = function (_Component) {
 	_inherits(Carousel, _Component);
 
-	function Carousel() {
+	// 构造函数
+	function Carousel(props) {
 		_classCallCheck(this, Carousel);
 
-		return _possibleConstructorReturn(this, (Carousel.__proto__ || Object.getPrototypeOf(Carousel)).apply(this, arguments));
+		var _this = _possibleConstructorReturn(this, (Carousel.__proto__ || Object.getPrototypeOf(Carousel)).call(this, props));
+
+		_this.state = {
+			id: props.params.id,
+			pics: props.params.pics
+		};
+		return _this;
 	}
+
+	/*
+ 	dom生成前加载轮播图数据
+ */
+
 
 	_createClass(Carousel, [{
 		key: 'componentWillMount',
-
-
-		/*
-  	处理轮播数据, 轮播数据结构
-  	carousel_data={
-  		id: "string",
-  		pics: [	// 图片对象
-  			[
-  				{
-  					src: "url",
-  					alt: "string",
-  					herf: "link",
-  				},
-  			],
-  		],
-  		url: "url"  // 获得图片的请求地址，这个和pics 必须有一个不为空， 如果同时存在则以pics为准
-  	}
-  */
 		value: function componentWillMount() {
 
-			// 测试数据使用
-			this.setState(_carouselData2.default);
+			this.get_props();
+		}
+	}, {
+		key: 'get_props',
+		value: function get_props() {
+			var _this2 = this;
 
-			// 正式数据使用
-			// let _data = this.props.carousel_data;
-			// ( "pics" in _data && _data.pics !== undefined && _data.pics.length > 0 ) 
-			// ? this.setState({id: _data.id, pics: _data.pics})
-			// : ;// 执行url的请求 ajax  ?? 同步异步问题 回掉执行setState
+			var params = this.props.params;
+
+			if (!params.pics.items || !params.pics.items.length) {
+				(0, _XHR2.default)("get", params.pics.url, null, true, function (result) {
+					_this2.setState({ pics: result });
+				}, this);
+			}
 		}
 
 		/*
@@ -76,7 +78,7 @@ var Carousel = function (_Component) {
 			return _react2.default.createElement(
 				'div',
 				{ className: 'carousel-inner' },
-				this.state.pics.map(function (imgs, idx_imgs) {
+				this.state.pics.items.map(function (imgs, idx_imgs) {
 					var class_name = idx_imgs === 0 ? "item active" : "item";
 					var _max_width = Math.floor(100 / imgs.length * 100) / 100 + "%";
 					return _react2.default.createElement(
@@ -96,7 +98,7 @@ var Carousel = function (_Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this2 = this;
+			var _this3 = this;
 
 			return _react2.default.createElement(
 				'div',
@@ -104,9 +106,9 @@ var Carousel = function (_Component) {
 				_react2.default.createElement(
 					'ol',
 					{ className: 'carousel-indicators' },
-					this.state.pics.map(function (pic, idx) {
+					this.state.pics.items.map(function (pic, idx) {
 						var class_name = idx === 0 ? "active" : '';
-						return _react2.default.createElement('li', { 'data-target': "#" + _this2.state.id, 'data-slide-to': idx, className: class_name, key: idx });
+						return _react2.default.createElement('li', { 'data-target': "#" + _this3.state.id, 'data-slide-to': idx, className: class_name, key: idx });
 					})
 				),
 				this.push_carousel_inner(),
@@ -136,5 +138,51 @@ var Carousel = function (_Component) {
 
 	return Carousel;
 }(_react.Component);
+
+/*
+	数据校验，以下为基本数据结构
+*/
+
+
+Carousel.propTypes = {
+	params: _propTypes2.default.shape({
+		id: _propTypes2.default.string.isRequired,
+		pics: _propTypes2.default.shape({
+			items: _propTypes2.default.arrayOf(_propTypes2.default.arrayOf(_propTypes2.default.shape({
+				src: _propTypes2.default.string.isRequired,
+				alt: _propTypes2.default.string.isRequired,
+				href: _propTypes2.default.string.isRequired
+			}))),
+			url: _propTypes2.default.string
+		})
+	}).isRequired
+};
+
+/*
+	默认演示数据 以下为数据结构
+*/
+
+Carousel.defaultProps = {
+	params: {
+		id: "Carousel-Demonstration", // 轮播标记组的id
+		pics: {
+			items: [// 二维数组，表示每个轮播项可以是一个或任意多个图片
+			[{
+				src: "./img/1.jpg",
+				alt: "Demonstration 1",
+				href: "#"
+			}], [{
+				src: "./img/4.jpg",
+				alt: "Demonstration 2",
+				href: "#"
+			}], [{
+				src: "./img/5.jpg",
+				alt: "Demonstration 3",
+				href: "#"
+			}]],
+			url: "#" // 获得图片的请求地址，这个和pics 必须有一个不为空， 如果同时存在则以pics为准
+		}
+	}
+};
 
 exports.default = Carousel;

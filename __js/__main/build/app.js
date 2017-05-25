@@ -20,12 +20,19 @@ var _Carousel = require('./component/Carousel');
 
 var _Carousel2 = _interopRequireDefault(_Carousel);
 
+var _TestData = require('../test_data/TestData');
+
+var _TestData2 = _interopRequireDefault(_TestData);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+{/* 载入测试数据 */}
+
 
 _reactDom2.default.render(_react2.default.createElement(
 	'div',
 	null,
-	_react2.default.createElement(_Navigator2.default, null),
-	_react2.default.createElement(_Carousel2.default, null),
+	_react2.default.createElement(_Navigator2.default, { params: (0, _TestData2.default)('Navigator') }),
+	_react2.default.createElement(_Carousel2.default, { params: (0, _TestData2.default)('Carousel') }),
 	_react2.default.createElement(_Button2.default, null)
 ), document.getElementById("pad"));

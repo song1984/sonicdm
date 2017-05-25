@@ -14,9 +14,13 @@ var _SingleEmitter = require('./SingleEmitter');
 
 var _SingleEmitter2 = _interopRequireDefault(_SingleEmitter);
 
-var _navigatorData = require('../../test_data/navigatorData');
+var _propTypes = require('prop-types');
 
-var _navigatorData2 = _interopRequireDefault(_navigatorData);
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _XHR = require('./XHR');
+
+var _XHR2 = _interopRequireDefault(_XHR);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26,25 +30,30 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-{/*载入测试数据 */}
-
 var Navigator = function (_Component) {
 	_inherits(Navigator, _Component);
 
-	function Navigator() {
+	function Navigator(props) {
 		_classCallCheck(this, Navigator);
 
-		return _possibleConstructorReturn(this, (Navigator.__proto__ || Object.getPrototypeOf(Navigator)).apply(this, arguments));
+		var _this = _possibleConstructorReturn(this, (Navigator.__proto__ || Object.getPrototypeOf(Navigator)).call(this, props));
+
+		_this.state = {
+			id: props.params.id,
+			logo: props.params.logo,
+			dropdowns: props.params.dropdowns
+		};
+		return _this;
 	}
+
+	/*
+ 	1. 利用生命周期 获得数据 调用this.get_props()
+ 	2. 监听 广播 事件	
+ */
+
 
 	_createClass(Navigator, [{
 		key: 'componentWillMount',
-
-
-		/*
-  	1. 利用生命周期 获得数据 调用this.get_props()
-  	2. 监听 广播 事件	
-  */
 		value: function componentWillMount() {
 
 			this.get_props();
@@ -62,14 +71,21 @@ var Navigator = function (_Component) {
 	}, {
 		key: 'get_props',
 		value: function get_props() {
+			var _this2 = this;
 
-			// 从服务端获得导航栏的所有相关信息，
-			var temp_dropdowns = _navigatorData2.default.dropdowns;
-			var temp_logo = _navigatorData2.default.logo;
+			var params = this.props.params;
 
-			// 并赋值到this.dropdowns this.logo
-			this.dropdowns = temp_dropdowns;
-			this.logo = temp_logo;
+			if (!params.logo.src) {
+				(0, _XHR2.default)("get", params.logo.url, null, true, function (result) {
+					_this2.setState({ logo: result });
+				});
+			}
+
+			if (!params.dropdowns.menus || !params.dropdowns.menus.length) {
+				(0, _XHR2.default)("get", params.dropdowns.url, null, true, function (result) {
+					_this2.setState({ dropdowns: result });
+				});
+			}
 		}
 
 		/*
@@ -85,11 +101,11 @@ var Navigator = function (_Component) {
 			var idx_op = event.target.dataset.idx_op;
 
 			// 带有菜单的 点击菜单标题应该直接返回
-			var item = this.dropdowns[idx];
+			var item = this.state.dropdowns.menus[idx];
 			if (item.options != undefined && idx_op == undefined) return;
 
 			// 获得任务
-			var mission = idx_op != undefined ? this.dropdowns[idx].options[idx_op].mission : this.dropdowns[idx].mission;
+			var mission = idx_op != undefined ? this.state.dropdowns.menus[idx].options[idx_op].mission : this.state.dropdowns.menus[idx].mission;
 			console.log(mission);
 			// 通过第三方组件触发自定义事件，以此方式通知其他组件重新渲染自己
 			_SingleEmitter2.default.emit('component', mission);
@@ -102,12 +118,12 @@ var Navigator = function (_Component) {
 	}, {
 		key: 'create_dropdown',
 		value: function create_dropdown() {
-			var _this2 = this;
+			var _this3 = this;
 
 			return _react2.default.createElement(
 				'ul',
 				{ className: 'nav navbar-nav', onClick: this.plate_switch.bind(this) },
-				this.dropdowns.map(function (item, idx) {
+				this.state.dropdowns.menus.map(function (item, idx) {
 					return _react2.default.createElement(
 						'li',
 						{ className: 'dropdown', key: idx },
@@ -118,7 +134,7 @@ var Navigator = function (_Component) {
 						),
 						item.options != undefined && item.options.length > 0 ? _react2.default.createElement(
 							'ul',
-							{ className: 'dropdown-menu', role: 'menu', onClick: _this2.plate_switch.bind(_this2) },
+							{ className: 'dropdown-menu', role: 'menu', onClick: _this3.plate_switch.bind(_this3) },
 							item.options.map(function (option, idx_op) {
 								return _react2.default.createElement(
 									'li',
@@ -163,7 +179,7 @@ var Navigator = function (_Component) {
 						_react2.default.createElement(
 							'a',
 							{ href: '#', className: 'navbar-brand' },
-							_react2.default.createElement('img', { src: this.logo.src, style: { height: "100%", width: "auto" }, alt: this.logo.alt })
+							_react2.default.createElement('img', { src: this.state.logo.src, style: { height: "100%", width: "auto" }, alt: this.state.logo.alt })
 						),
 						_react2.default.createElement(
 							'p',
@@ -171,7 +187,7 @@ var Navigator = function (_Component) {
 							_react2.default.createElement(
 								'strong',
 								null,
-								this.logo.alt
+								this.state.logo.alt
 							)
 						)
 					),
@@ -187,5 +203,54 @@ var Navigator = function (_Component) {
 
 	return Navigator;
 }(_react.Component);
+
+// Navigator.propTypes = {
+// 	params: PropTypes.shape({
+// 		id: PropTypes.string.isRequired,
+// 		logo: PropTypes.shape({
+// 			src: PropTypes.string.isRequired,
+// 			alt: PropTypes.string
+// 		}),
+// 		dropdowns: PropTypes.arrayOf(PropTypes.shape({
+
+// 		})),
+// 		url: PropTypes.string
+// 	})
+// } 
+
+
+Navigator.defaultProps = {
+	params: {
+		logo: {
+			src: "img/apple-touch-icon.png",
+			alt: "SonicDM",
+			url: ''
+		},
+		dropdowns: {
+			menus: [{
+				title: "Products",
+				mission: "get all products"
+			}, {
+				title: "Service",
+				mission: "goto service"
+			}, {
+				title: "Support",
+				mission: "goto Support"
+			}, {
+				title: "About",
+				options: [{
+					href: "Articel",
+					name: "AAA",
+					mission: "goto AAA"
+				}, {
+					href: "BBB",
+					name: "BBB",
+					mission: "goto BBB"
+				}]
+			}],
+			url: ''
+		}
+	}
+};
 
 exports.default = Navigator;
