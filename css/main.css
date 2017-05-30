@@ -1,4 +1,4 @@
-/*! sonicdm 2017-05-26 */
+/*! sonicdm 2017-05-30 */
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -5834,6 +5834,120 @@ button.close {
   background: transparent;
   border: 0;
   -webkit-appearance: none;
+}
+.sdm-dropdown-menu {
+  z-index: 1000;
+  display: none;
+  min-width: 160px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 14px;
+  text-align: left;
+  background-color: #fff;
+  background-clip: padding-box;
+}
+.sdm-dropdown-menu.open {
+  display: block;
+}
+.sdm-dropdown-menu > li > a {
+  display: block;
+  padding: 8px 20px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+}
+.sdm-collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  -webkit-transition-property: height, visibility;
+  transition-property: height, visibility;
+  -webkit-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-timing-function: ease;
+  transition-timing-function: ease;
+}
+.sdm-caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid \9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+.sdm-dropdown-option > a:hover,
+.sdm-dropdown-submenu-title > a:hover,
+.sdm-dropdown-option > a:focus,
+.sdm-dropdown-submenu-title > a:focus {
+  text-decoration: none;
+  color: #262626;
+  background-color: mistyrose;
+  outline: 0;
+}
+.navbar-nav > .sdm-dropdown-root.sdm-dropdown-option > a,
+.navbar-nav > .sdm-dropdown-root.sdm-dropdown-submenu-title > a {
+  display: inline-block;
+}
+.navbar-nav > .sdm-dropdown-root.sdm-dropdown-option > a:hover,
+.navbar-nav > .sdm-dropdown-root.sdm-dropdown-submenu-title > a:hover,
+.navbar-nav > .sdm-dropdown-root.sdm-dropdown-option > a:focus,
+.navbar-nav > .sdm-dropdown-root.sdm-dropdown-submenu-title > a:focus {
+  text-decoration: none;
+  color: #262626;
+  background-color: mistyrose;
+  outline: 0;
+}
+.sdm-dropdown-hover {
+  text-decoration: none;
+  color: #262626;
+  background-color: mistyrose;
+  outline: 0;
+}
+.caret-fixed {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+}
+.sdm-dropdown-root > .sdm-dropdown-toggle > .caret-fixed {
+  display: inline-block;
+  position: static;
+  float: right !important;
+}
+@media (max-width: 768px) {
+  .sdm-dropdown-menu {
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+  }
+  .sdm-dropdown-menu.sdm-root-menu {
+    position: static;
+  }
+  .sdm-dropdown-menu > li > a {
+    padding: 10px 15px;
+    color: #777;
+  }
+  .navbar-nav > .sdm-dropdown-root.sdm-dropdown-option > a,
+  .navbar-nav > .sdm-dropdown-root.sdm-dropdown-submenu-title > a {
+    display: block;
+  }
+  .caret-fixed {
+    display: inline-block;
+    position: static;
+    float: right !important;
+  }
+}
+@media (min-width: 768px) {
+  .sdm-dropdown-menu.sdm-root-menu {
+    position: fixed;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  }
 }
 .modal-open {
   overflow: hidden;

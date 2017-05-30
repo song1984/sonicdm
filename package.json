@@ -26,6 +26,7 @@
     "enzyme": "^2.8.2",
     "fbemitter": "^2.1.1",
     "grunt": "^1.0.1",
+    "grunt-babel": "^6.0.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-jshint": "^1.1.0",
