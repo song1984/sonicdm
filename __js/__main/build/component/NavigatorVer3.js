@@ -96,57 +96,71 @@ var Navigator = function (_Component) {
 		key: 'plate_switch',
 		value: function plate_switch(event) {
 
-			// 通过event获得元素中idx 这个idx对应 props中入参数组的下标，然后读取对应数组元素中的任务信息
-			var idx = event.target.dataset.idx;
-			var idx_op = event.target.dataset.idx_op;
-
-			// 带有菜单的 点击菜单标题应该直接返回
-			var item = this.state.dropdowns.menus[idx];
-			if (item.options != undefined && idx_op == undefined) return;
-
-			// 获得任务
-			var mission = idx_op != undefined ? this.state.dropdowns.menus[idx].options[idx_op].mission : this.state.dropdowns.menus[idx].mission;
+			// let mission = event.target.dataset.mission; // lte IE 10 不支持
+			var mission = event.target.getAttribute("data-mission");
+			if (!mission) return;
 			console.log(mission);
-			// 通过第三方组件触发自定义事件，以此方式通知其他组件重新渲染自己
+			// 通过触发自定义事件通知目标组件更新state
 			_SingleEmitter2.default.emit('component', mission);
 		}
 
 		/*
-  	导航栏菜单
+  	导航栏菜单标题
   */
 
 	}, {
 		key: 'create_dropdown',
-		value: function create_dropdown() {
+		value: function create_dropdown(menus, rootMenuId, isFirst) {
 			var _this3 = this;
 
+			var ul_className = void 0,
+			    _onclick = void 0,
+			    li_className = void 0,
+			    _li_className = void 0,
+			    date = void 0,
+			    _rootMenuId = void 0,
+			    _isFirst = void 0;
+			if (isFirst && rootMenuId) {
+				// 第一层递归走这个
+				ul_className = "sdm-dropdown-menu sdm-root-menu";
+				_isFirst = false;
+			} else if (isFirst) {
+				// render 时先走这个
+				ul_className = "nav navbar-nav";
+				_onclick = this.plate_switch.bind(this);
+				_li_className = "sdm-dropdown-root";
+				date = new Date().getTime();
+				_isFirst = true;
+			} else {
+				// 第二层开始以后的递归 用这个
+				ul_className = "sdm-dropdown-menu";
+				_onclick = '';
+				_isFirst = false;
+			}
 			return _react2.default.createElement(
 				'ul',
-				{ className: 'nav navbar-nav', onClick: this.plate_switch.bind(this) },
-				this.state.dropdowns.menus.map(function (item, idx) {
+				{ className: ul_className, onClick: _onclick },
+				menus.map(function (menu, idx) {
+					var mission = menu.submenus != undefined && menu.submenus.length > 0 ? '' : menu.mission;
+
+					_isFirst ? menu.submenus != undefined && menu.submenus.length > 0 ? li_className = _li_className + " sdm-dropdown-submenu-title" : li_className = _li_className + " sdm-dropdown-option" : menu.submenus != undefined && menu.submenus.length > 0 ? li_className = "sdm-dropdown-submenu-title" : li_className = "sdm-dropdown-option";
+
+					_isFirst ? _rootMenuId = date + menu.option : _rootMenuId = rootMenuId;
+
 					return _react2.default.createElement(
 						'li',
-						{ className: 'dropdown', key: idx },
+						{ className: li_className, key: idx, id: _rootMenuId },
 						_react2.default.createElement(
 							'a',
-							{ href: '#', 'data-idx': idx, className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button' },
-							item.title
+							{ href: "#" + _rootMenuId, 'data-mission': mission, 'data-idx': idx, className: 'sdm-dropdown-toggle', role: 'button' },
+							menu.option,
+							li_className.indexOf("sdm-dropdown-submenu-title") > -1 ? _react2.default.createElement(
+								'div',
+								{ className: 'caret-fixed' },
+								_react2.default.createElement('span', { className: 'sdm-caret' })
+							) : ''
 						),
-						item.options != undefined && item.options.length > 0 ? _react2.default.createElement(
-							'ul',
-							{ className: 'dropdown-menu', role: 'menu', onClick: _this3.plate_switch.bind(_this3) },
-							item.options.map(function (option, idx_op) {
-								return _react2.default.createElement(
-									'li',
-									{ key: idx_op },
-									_react2.default.createElement(
-										'a',
-										{ 'data-idx': idx, 'data-idx_op': idx_op, href: '#' },
-										option.name
-									)
-								);
-							})
-						) : ''
+						menu.submenus != undefined && menu.submenus.length > 0 ? _this3.create_dropdown(menu.submenus, _rootMenuId, _isFirst) : ''
 					);
 				})
 			);
@@ -194,7 +208,7 @@ var Navigator = function (_Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'collapse navbar-collapse', id: 'collapsedNav' },
-						this.create_dropdown()
+						this.create_dropdown(this.state.dropdowns.menus, null, true)
 					)
 				)
 			);
@@ -214,12 +228,12 @@ Navigator.propTypes = {
 		}),
 		dropdowns: _propTypes2.default.shape({
 			menus: _propTypes2.default.arrayOf(_propTypes2.default.shape({
-				title: _propTypes2.default.string.isRequired,
+				option: _propTypes2.default.string.isRequired,
 				mission: _propTypes2.default.string.isRequired,
-				options: _propTypes2.default.arrayOf(_propTypes2.default.shape({
-					href: _propTypes2.default.string.isRequired,
-					name: _propTypes2.default.string.isRequired,
-					mission: _propTypes2.default.string.isRequired
+				submenus: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+					option: _propTypes2.default.string.isRequired,
+					mission: _propTypes2.default.string.isRequired,
+					submenus: _propTypes2.default.string.array
 				}))
 			})),
 			url: _propTypes2.default.string
@@ -229,6 +243,7 @@ Navigator.propTypes = {
 
 Navigator.defaultProps = {
 	params: {
+		id: 'Navigator_multiMenu',
 		logo: {
 			src: "img/apple-touch-icon.png",
 			alt: "SonicDM",
@@ -236,28 +251,45 @@ Navigator.defaultProps = {
 		},
 		dropdowns: {
 			menus: [{
-				title: "Products",
-				mission: "get all products"
+				option: 'Products', // 选项名称	required
+				mission: 'goto Products' // 请求链接	没有子菜单则required
 			}, {
-				title: "Service",
-				mission: "goto service"
+				option: 'Service',
+				mission: 'goto Service'
 			}, {
-				title: "Support",
-				mission: "goto Support"
+				option: 'Support',
+				mission: 'goto Support'
 			}, {
-				title: "About",
+				option: 'About',
 				mission: '',
-				options: [{
-					href: "Articel",
-					name: "AAA",
-					mission: "goto AAA"
+				submenus: [{
+					option: 'AAA',
+					mission: 'goto AAA',
+					submenus: [{
+						option: 'AAA-1',
+						mission: 'goto AAA-1',
+						submenus: [{
+							option: 'AAA-1-1',
+							mission: 'goto AAA-1-1',
+							submenus: [{
+								option: 'AAA-1-1-1',
+								mission: 'goto AAA-1-1-1'
+							}]
+						}]
+					}, {
+						option: 'AAA-2',
+						mission: 'goto AAA-2',
+						submenus: [{
+							option: 'AAA-2-1',
+							mission: 'goto AAA-2-1'
+						}]
+					}]
 				}, {
-					href: "BBB",
-					name: "BBB",
-					mission: "goto BBB"
+					option: 'BBB',
+					mission: 'goto BBB'
 				}]
 			}],
-			url: ''
+			url: 'url xxx' // 如果没有传menus 则通过url获得
 		}
 	}
 };

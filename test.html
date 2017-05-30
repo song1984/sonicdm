@@ -15,6 +15,24 @@
         <!--[if (lt IE 9) & (!IEMobile)]>
             <script src="js/vendor/respond.min.js">
         <![endif]--> 
+        <style>
+        	.testcollapse{
+        		margin:0;
+        		padding:0;
+			  overflow: hidden;
+			  -webkit-transition-property: height, visibility;
+			  transition-property: height, visibility;
+			  -webkit-transition-duration: 0.35s;
+			  transition-duration: 0.35s;
+			  -webkit-transition-timing-function: ease;
+			  transition-timing-function: ease;
+			  
+			        	}
+        	.testcollapse > li{
+        		margin:0;
+        		padding: 10px, 20px;
+        	}
+        </style>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -22,14 +40,18 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <div id="pad" class="container">
-            <!-- React App -->
-        </div>
+        <ul class="testcollapse">
+        	<li>王八</li>
+        	<li>王八</li>
+        	<li>王八</li>
+        	<li>王八</li>
+        	<li>王八</li>
+        	<li>王八</li>
+        </ul>
 
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
-        <script src="js/main.js"></script>
-        <script src="js/plugins.js"></script>
+
         <!-- <script src="__js/__plugins/source/Navigator-Ver2.js"></script> -->
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -43,3 +65,4 @@
         </script>
     </body>
 </html>
+

@@ -8,6 +8,10 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _NavigatorVer = require('./component/NavigatorVer3');
+
+var _NavigatorVer2 = _interopRequireDefault(_NavigatorVer);
+
 var _Navigator = require('./component/Navigator');
 
 var _Navigator2 = _interopRequireDefault(_Navigator);
@@ -32,7 +36,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _reactDom2.default.render(_react2.default.createElement(
 	'div',
 	null,
-	_react2.default.createElement(_Navigator2.default, { params: (0, _TestData2.default)('Navigator') }),
+	_react2.default.createElement(_NavigatorVer2.default, { params: (0, _TestData2.default)('NavigatorVer2') }),
 	_react2.default.createElement(_Carousel2.default, { params: (0, _TestData2.default)('Carousel') }),
 	_react2.default.createElement(_Button2.default, null)
 ), document.getElementById("pad"));
