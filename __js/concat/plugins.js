@@ -1,4 +1,4 @@
-/*! sonicdm 2017-05-31 */
+/*! sonicdm 2017-06-01 */
 // Avoid `console` errors in browsers that lack a console.
 (function() {
     var method;
@@ -35,131 +35,174 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+this.selector+'[href="'+b+'"]',d=a(c).parents("li").addClass("active");d.parent(".dropdown-menu").length&&(d=d.closest("li.dropdown").addClass("active")),d.trigger("activate.bs.scrollspy")},b.prototype.clear=function(){a(this.selector).parentsUntil(this.options.target,".active").removeClass("active")};var d=a.fn.scrollspy;a.fn.scrollspy=c,a.fn.scrollspy.Constructor=b,a.fn.scrollspy.noConflict=function(){return a.fn.scrollspy=d,this},a(window).on("load.bs.scrollspy.data-api",function(){a('[data-spy="scroll"]').each(function(){var b=a(this);c.call(b,b.data())})})}(jQuery),+function(a){"use strict";function b(b){return this.each(function(){var d=a(this),e=d.data("bs.tab");e||d.data("bs.tab",e=new c(this)),"string"==typeof b&&e[b]()})}var c=function(b){this.element=a(b)};c.VERSION="3.3.7",c.TRANSITION_DURATION=150,c.prototype.show=function(){var b=this.element,c=b.closest("ul:not(.dropdown-menu)"),d=b.data("target");if(d||(d=b.attr("href"),d=d&&d.replace(/.*(?=#[^\s]*$)/,"")),!b.parent("li").hasClass("active")){var e=c.find(".active:last a"),f=a.Event("hide.bs.tab",{relatedTarget:b[0]}),g=a.Event("show.bs.tab",{relatedTarget:e[0]});if(e.trigger(f),b.trigger(g),!g.isDefaultPrevented()&&!f.isDefaultPrevented()){var h=a(d);this.activate(b.closest("li"),c),this.activate(h,h.parent(),function(){e.trigger({type:"hidden.bs.tab",relatedTarget:b[0]}),b.trigger({type:"shown.bs.tab",relatedTarget:e[0]})})}}},c.prototype.activate=function(b,d,e){function f(){g.removeClass("active").find("> .dropdown-menu > .active").removeClass("active").end().find('[data-toggle="tab"]').attr("aria-expanded",!1),b.addClass("active").find('[data-toggle="tab"]').attr("aria-expanded",!0),h?(b[0].offsetWidth,b.addClass("in")):b.removeClass("fade"),b.parent(".dropdown-menu").length&&b.closest("li.dropdown").addClass("active").end().find('[data-toggle="tab"]').attr("aria-expanded",!0),e&&e()}var g=d.find("> .active"),h=e&&a.support.transition&&(g.length&&g.hasClass("fade")||!!d.find("> .fade").length);g.length&&h?g.one("bsTransitionEnd",f).emulateTransitionEnd(c.TRANSITION_DURATION):f(),g.removeClass("in")};var d=a.fn.tab;a.fn.tab=b,a.fn.tab.Constructor=c,a.fn.tab.noConflict=function(){return a.fn.tab=d,this};var e=function(c){c.preventDefault(),b.call(a(this),"show")};a(document).on("click.bs.tab.data-api",'[data-toggle="tab"]',e).on("click.bs.tab.data-api",'[data-toggle="pill"]',e)}(jQuery),+function(a){"use strict";function b(b){return this.each(function(){var d=a(this),e=d.data("bs.affix"),f="object"==typeof b&&b;e||d.data("bs.affix",e=new c(this,f)),"string"==typeof b&&e[b]()})}var c=function(b,d){this.options=a.extend({},c.DEFAULTS,d),this.$target=a(this.options.target).on("scroll.bs.affix.data-api",a.proxy(this.checkPosition,this)).on("click.bs.affix.data-api",a.proxy(this.checkPositionWithEventLoop,this)),this.$element=a(b),this.affixed=null,this.unpin=null,this.pinnedOffset=null,this.checkPosition()};c.VERSION="3.3.7",c.RESET="affix affix-top affix-bottom",c.DEFAULTS={offset:0,target:window},c.prototype.getState=function(a,b,c,d){var e=this.$target.scrollTop(),f=this.$element.offset(),g=this.$target.height();if(null!=c&&"top"==this.affixed)return e<c&&"top";if("bottom"==this.affixed)return null!=c?!(e+this.unpin<=f.top)&&"bottom":!(e+g<=a-d)&&"bottom";var h=null==this.affixed,i=h?e:f.top,j=h?g:b;return null!=c&&e<=c?"top":null!=d&&i+j>=a-d&&"bottom"},c.prototype.getPinnedOffset=function(){if(this.pinnedOffset)return this.pinnedOffset;this.$element.removeClass(c.RESET).addClass("affix");var a=this.$target.scrollTop(),b=this.$element.offset();return this.pinnedOffset=b.top-a},c.prototype.checkPositionWithEventLoop=function(){setTimeout(a.proxy(this.checkPosition,this),1)},c.prototype.checkPosition=function(){if(this.$element.is(":visible")){var b=this.$element.height(),d=this.options.offset,e=d.top,f=d.bottom,g=Math.max(a(document).height(),a(document.body).height());"object"!=typeof d&&(f=e=d),"function"==typeof e&&(e=d.top(this.$element)),"function"==typeof f&&(f=d.bottom(this.$element));var h=this.getState(g,b,e,f);if(this.affixed!=h){null!=this.unpin&&this.$element.css("top","");var i="affix"+(h?"-"+h:""),j=a.Event(i+".bs.affix");if(this.$element.trigger(j),j.isDefaultPrevented())return;this.affixed=h,this.unpin="bottom"==h?this.getPinnedOffset():null,this.$element.removeClass(c.RESET).addClass(i).trigger(i.replace("affix","affixed")+".bs.affix")}"bottom"==h&&this.$element.offset({top:g-b-f})}};var d=a.fn.affix;a.fn.affix=b,a.fn.affix.Constructor=c,a.fn.affix.noConflict=function(){return a.fn.affix=d,this},a(window).on("load",function(){a('[data-spy="affix"]').each(function(){var c=a(this),d=c.data();d.offset=d.offset||{},null!=d.offsetBottom&&(d.offset.bottom=d.offsetBottom),null!=d.offsetTop&&(d.offset.top=d.offsetTop),b.call(c,d)})})}(jQuery);'use strict';
 
 +function () {
+	'use strict';
+	// 监听点击事件，获得节点对象
 
-	// 监听全局click事件 回调函数中分析具体响应行为
-	$(document).on('click.sdm-dropdown', analysis);
+	$(document).on('click.sdm-dropdown-menu', shunt);
 
-	function analysis(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		var $elem = $(e.target);
-		$elem.hasClass('sdm-dropdown-toggle') || $elem.hasClass('sdm-caret') || $elem.hasClass("caret-fixed") ? toggleMenu($elem) : clearMenu();
+	function shunt(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		var $elem = $(event.target);
+		$elem.hasClass('sdm-dropdown-toggle') || $elem.hasClass('sdm-caret') || $elem.hasClass("caret-fixed") ? toggleMenu($elem) : closeAllMenu();
 	}
 
 	function toggleMenu(elem) {
-		var $elem = elem;
-		$elem.hasClass("caret-fixed") ? $elem = $elem.parent() : $elem.hasClass("sdm-caret") ? $elem = $elem.parent().parent() : '';
-
-		var $parent = $elem.parent();
-		// 如果用户点击的不是菜单的范围 比如任意空白区 则关闭菜单
-		if ($parent.hasClass('sdm-dropdown-option')) {
-			clearMenu();
+		elem.hasClass("caret-fixed") ? elem = elem.parent() : elem.hasClass("sdm-caret") ? elem = elem.parent().parent() : '';
+		if (elem.parent().hasClass('sdm-dropdown-option')) {
+			// 如果是选项 直接关闭菜单
+			closeAllMenu();
 			return;
 		}
 
-		// 处理下拉子菜单的伸缩
-		if ($parent.hasClass('sdm-dropdown-submenu-title') && !$parent.hasClass('sdm-dropdown-root')) {
-			var submenuHideCallback = function submenuHideCallback() {
-				// 关闭已经打开的菜单
-				closeMenu();
-
-				// 重新制定已打开的菜单路径
-				var id = $elem.attr("href");
-				var $openUls = $(id).find('ul');
-				if ($openUls.length) {
-					var parenUl = $ul.parent().parent()[0];
-					$openUls.each(function () {
-						$(this).addClass('open');
-						if (this == parenUl) return false; // return false == break;
-					});
-				}
-
-				if (isToggle) {
-					$elem.parent().parent().addClass('sdm-collapse');
-				}
-				isOpen || showMenu($ul);
-			};
-
-			var $ul = $($parent.find('ul')[0]);
-			// 判断 子菜单是否已经打开
-			var isOpen = $ul.hasClass('open');
-
-			var isToggle = $elem.parent().find('.sdm-collapse').length > 0;
-
-			hideMenu($elem, submenuHideCallback);
-
+		var ownMenu = elem.parent().find('ul')[0]; // 点击目标对应的菜单
+		var parentMenu = elem.parent().parent()[0]; // 点击目标的父菜单
+		var allOpenMenu = $.makeArray($('.sdm-dropdown-menu.open')); // 所有已经打开的菜单
+		if (!allOpenMenu.length) {
+			// 目前没有展开的菜单， 则不存在关闭和补全路径问题直接执行打开动画
+			openMenu(ownMenu);
 			return;
 		}
 
-		// 处理根菜单的伸缩
-		if ($parent.hasClass('sdm-dropdown-root')) {
-			var rootMenuHideCallback = function rootMenuHideCallback() {
-				closeMenu();
-				_isOpen || showMenu(_$ul);
+		// 如果已存在打开的路径 判断 点击目标 与 当前展开路径的关系
+		var ownInAllOpen = allOpenMenu.indexOf(ownMenu);
+		var parentInAllOpen = allOpenMenu.indexOf(parentMenu);
+
+		if (ownInAllOpen > -1) {
+			// 证明这个当前打开 目标关闭
+			closeMenu(ownMenu, complete(allOpenMenu, parentInAllOpen));
+		} else if (parentInAllOpen > -1) {
+			// 如果父菜单包含在其中且ownMenu不在其中 则表示ownMenu是这个路径的延展或分枝
+			if (parentInAllOpen === allOpenMenu.length - 1) {
+				// 如果是延展则不进行关闭动画
+				openMenu(ownMenu);
+			} else {
+				// 如果是分支 则先关闭父菜单下的第一个子菜单 然后再执行路径补全 再执行打开菜单
+				closeMenu(allOpenMenu[parentInAllOpen + 1], complete(allOpenMenu, parentInAllOpen, openMenu, ownMenu));
+			}
+		} else {
+			// ownMenu 和 parentMenu都不在打开路径中 证明点击的是导航栏
+			closeMenu(allOpenMenu[0], complete(allOpenMenu, -1, openMenu, ownMenu));
+		}
+
+		// 重塑菜单路径
+		function complete(allOpenMenu, openLength, callBack, cbParam) {
+			return function () {
+				clearAllOpen(); // 清空所有的open		
+				if (openLength > -1) {
+					// 重新补全open路径
+					for (var i = 0; i <= openLength; i++) {
+						$(allOpenMenu[i]).addClass('open');
+					}
+				}
+				callBack && callBack(cbParam);
 			};
-
-			var _$ul = $($parent.find('ul')[0]);
-			var _isOpen = _$ul.hasClass('open');
-			// step1 执行收缩动画 step2 清空所有open
-			hideMenu($elem, rootMenuHideCallback);
-
-			return;
 		}
 	}
 
-	/*
- 	将所有展开菜单收缩
- */
-	function hideMenu(elem, resolve) {
+	function closeMenu(menu, completeCallBack) {
+		var toClose = true;
+		anime(menu, toClose, completeCallBack); // anime异步 所以动画之后的后续操作只能都放在回调函数
+	}
 
-		var ul = elem.parent().parent()[0];
-		// sdm-collapse 代表要进行关闭动画的菜单
-		var $collapsed = $($('.sdm-dropdown-root ul.sdm-collapse'));
-		// 被点击的菜单是已经打开菜单的子菜单 
-		if (!$collapsed.length || ul == $collapsed[0]) {
-			resolve();
-			return;
+	function openMenu(menu) {
+		var toClose = false;
+		anime(menu, toClose, null);
+	}
+
+	function anime(menu, toClose, completeCallBack) {
+		var s_height = void 0,
+		    d_height = void 0;
+		if (toClose) {
+			s_height = $(menu).addClass('open').height();
+			d_height = 0;
+		} else {
+			s_height = 0;
+			d_height = $(menu).addClass('open').height();
 		}
 
-		var height = $collapsed.height();
-		$collapsed.height(height);
-		$collapsed.addClass('sdm-collapsing')['height'](0);
-
+		$(menu).height(s_height);
+		$(menu).addClass('sdm-collapsing')['height'](d_height);
 		if (!$.support.transition) {
-			$collapsed.removeClass('sdm-collapsing')['height']('');
-			resolve();
+			$(menu).removeClass('sdm-collapsing')['height']('');
+			completeCallBack && completeCallBack();
 		} else {
-			$collapsed.one('bsTransitionEnd', function () {
-				$collapsed.removeClass('sdm-collapsing')['height']('');
-				resolve();
+			$(menu).one("bsTransitionEnd", function () {
+				$(menu).removeClass('sdm-collapsing')['height']('');
+				completeCallBack && completeCallBack();
 			});
 		}
 	}
 
-	function showMenu(elem) {
-		var $elem = elem;
-		var height = $elem.addClass('open').height();
-		$elem.addClass('sdm-collapsing')['height'](0);
-		$elem.height(height);
-		if (!$.support.transition) {
-			$elem.removeClass('sdm-collapsing')['height']('');
-			$elem.addClass('sdm-collapse');
-		} else {
-			$elem.one("bsTransitionEnd", function () {
-				$elem.removeClass('sdm-collapsing')['height']('');
-				$elem.addClass('sdm-collapse');
-			});
-		}
-	}
-
-	function clearMenu() {
-		closeMenu();
-		$('[data-toggle="collapse"]').hasClass('collapsed') || $('[data-toggle="collapse"]').trigger('click.bs.collapse.data-api'); // 触发collapse关闭
-	}
-
-	function closeMenu() {
-		$('.sdm-dropdown-root ul.open').each(function () {
-			$(this).removeClass('open').removeClass('sdm-collapse');
+	function clearAllOpen() {
+		$('.sdm-dropdown-menu.open').each(function () {
+			$(this).removeClass('open');
 		});
 	}
+
+	function closeAllMenu() {
+		clearAllOpen();
+		var collapseBtn = $('[data-toggle="collapse"]');
+		if (!collapseBtn.hasClass('collapsed')) {
+			collapseBtn[0].click();
+		}
+	}
 }();
+
+/*
+	1 获得点击的元素 ？ 判断 被点击的是选项 还是子菜单标题？ 还是空白处
+		1.1 如果是选项 直接执行 全局 清除 open。 因为 已经选了就代表菜单结束
+		1.2 如果是子菜单标题 增看 下文 2 中的内容
+		1.3 如果是非菜单区域 则看下文 3 种内容
+	2 判断打开 还是 关闭
+		2.1 关闭 如果是关闭 则  判断 动画执行位置  （距离当前点击目标最近的下级菜单）
+				关闭 可以理解为 点击了当前 菜单已展开路径中的一项 也就是说 如果你点击的东西有open类 那就是要关闭 
+
+		2.2 打开 
+				2.2.1 关闭 执行关闭动画 距离点击目标最近的下级菜单
+				2.2.2 打开 执行展开动画 展开点击目标最近的下级菜单
+	
+	3 特例 点击菜单之外的区域直接关闭菜单 （是否执行动画待定）
+
+	分解 2.1
+		如何判断是关闭？  被点击的目标 是open 路径中的一个元素 则代表这个东西必然已经是开着的 所以关闭 
+
+		判断是否进行关闭动画？  只要是单纯的关闭都会执行
+
+		执行关闭动画？  因为 点击的目标是<a>元素 所以实际上需要拿到<a>的兄弟元素<ul> 这个才是有open状态的东西 给他执行一次动画就行了
+
+		怎么确定关闭动画执行位置？  如果确定是单纯关闭状态 就是关闭点击的那个 菜单
+
+		补充：执行动画后 需要 执行一次全局 清open  因为不清理open 无法保证展开路径中 不残留多余的open类
+
+
+	分解 2.2
+		如何判断是打开？  首先 被点击的目标没有open类 证明此前 确实是关闭状态， 然后再判断其父菜单是否为open状态 如果 其父为open 则证明
+						是同一个路径下的延展， 如果不是 则证明 是打点击了另一个导航栏标题
+		
+		判断是否进行关闭动画？ 获得所有带有open的菜单 然后遍历这个数组 并与被点击的元素的父菜单做比较 一旦出现一致情况 则可以判断 动画
+							在哪执行
+
+							option 1 与最后一个数组元素一致  表示将要展开的菜单是最后一个展开菜单的子菜单 （则不进行关闭动画）
+
+							option 2 点击目标的父菜单 与数组中 任意一个菜单一致 但不是最后一个 则在一致的那个后面的菜单 执行关闭动画
+
+							option 3 如果所有数组元素 都与点击目标不一致 则认为 是打开了另一个导航栏菜单  则 动画在 数组中第一个菜单上执行
+
+							补充 同样关闭动画完成后 执行全局清理open 
+
+		打开动画执行位置？  除了单纯关闭之外 都需要执行打开动画	 执行位置就是点击的那个元素对应的菜单
+							补充 因为之前一步清理了所有open 所以 在执行打开动画之前 需要 先补上所有的上级菜单路径的open类
+
+							补充方式 为 获得 点击目标中的href 这个东西的值 是 它这条路径的根菜单的id 就是导航选项的id ，然后获得
+							这个id对应的所有 子菜单  然后用被点击元素的父菜单 与这个数组做比较 比较的过程中给每个元素 增加open类
+							直到遍历到一致 为止，  
+
+							特例  在进行遍历之前  应该先获得点击目标的父菜单 如果发现其 父菜单没有 sdm-dropdown-menu
+							类 则直接执行打开动画 不必进行便利过程
+
+	分解 3  
+		什么是特例？ 只要点击的目标不是菜单中的内容 都算特例
+		如何处理特例？  step1 全局执行清除open， step2 执行trigger 触发 collapse组件的按钮， 触发前判断 collapse的状态 是否在
+						小屏幕 且展开折叠的情况下  如果不是 则仅执行 step1
+*/
