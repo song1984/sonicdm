@@ -16,7 +16,7 @@
 		$elem.hasClass("caret-fixed") ? $elem = $elem.parent() : $elem.hasClass("sdm-caret") ? $elem = $elem.parent().parent() : '';
 
 		let $parent = $elem.parent();
-
+		// 如果用户点击的不是菜单的范围 比如任意空白区 则关闭菜单
 		if ($parent.hasClass('sdm-dropdown-option')){
 			clearMenu();
 			return;
@@ -24,14 +24,18 @@
 
 		// 处理下拉子菜单的伸缩
 		if ($parent.hasClass('sdm-dropdown-submenu-title') && !$parent.hasClass('sdm-dropdown-root')){
+
 			let $ul = $($parent.find('ul')[0]);
 			// 判断 子菜单是否已经打开
 		 	let isOpen = $ul.hasClass('open');
 		 	
+		 	let isToggle = $elem.parent().find('.sdm-collapse').length > 0;
+
 		 	hideMenu($elem, submenuHideCallback);
 		 	function submenuHideCallback(){
 			 	// 关闭已经打开的菜单
 			 	closeMenu();
+			 	
 			 	// 重新制定已打开的菜单路径
 			 	let id = $elem.attr("href");
 			 	let $openUls = $(id).find('ul');
@@ -41,9 +45,12 @@
 						$(this).addClass('open');
 						if(this == parenUl) return false; // return false == break;
 					});
+				}
 
-					isOpen || showMenu($ul);
-				}	
+				if(isToggle){
+					$elem.parent().parent().addClass('sdm-collapse');
+				}
+				isOpen || showMenu($ul);	
 		 	}	
 			return;
 		}
@@ -68,12 +75,16 @@
 		将所有展开菜单收缩
 	*/
 	function hideMenu (elem, resolve){
+
 		let ul = elem.parent().parent()[0];
-		let $collapsed = $($('.sdm-dropdown-root ul.sdm-collapse'));
+		// sdm-collapse 代表要进行关闭动画的菜单
+		let $collapsed = $($('.sdm-dropdown-root ul.sdm-collapse')); 
+		// 被点击的菜单是已经打开菜单的子菜单 
 		if (!$collapsed.length || ul == $collapsed[0]) {
 			resolve();
 			return;
 		}
+
 		let height = $collapsed.height();
 		$collapsed.height(height);
 		$collapsed.addClass('sdm-collapsing')['height'](0);
